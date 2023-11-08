@@ -60,4 +60,4 @@ Hit `Crtl + C` in both the terminals to stop the nodes.
 
 This will look something like this:
 
-![](results/pub_subss.png)
+![](results/pub_sub_ss.png)
