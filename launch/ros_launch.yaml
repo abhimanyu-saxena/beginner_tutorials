@@ -1,0 +1,21 @@
+launch:
+
+- arg:
+    name: "freq"
+    default: "1.0"
+
+- node:
+    pkg: "beginner_tutorials"
+    exec: "talker"
+    param:
+    -
+     name: "freq"
+     value: "$(var frequency)"
+
+- node:
+    pkg: "beginner_tutorials"
+    exec: "listener"
+      
+- node:
+    pkg: "beginner_tutorials"
+    exec: "server"
