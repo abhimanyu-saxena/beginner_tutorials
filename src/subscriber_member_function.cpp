@@ -61,7 +61,7 @@ class MinimalSubscriber : public rclcpp::Node {
 /**
  * @brief Main function
  *
- * Initializes the ROS 2 node, spins it, and shuts it down.
+ * Initializes the node and keeps it running.
  *
  * @param argc Number of command line arguments
  * @param argv Array of command line arguments

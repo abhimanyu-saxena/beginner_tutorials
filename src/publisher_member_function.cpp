@@ -40,7 +40,7 @@ using sharedFuture =
 
 /**
  * @brief MinimalPublisher class, defines the publisher, service client and the
- * associated function
+ * associated functions
  */
 class MinimalPublisher : public rclcpp::Node {
  public:
@@ -55,7 +55,7 @@ class MinimalPublisher : public rclcpp::Node {
     auto param = this->get_parameter("freq");
     auto freq = param.get_parameter_value().get<std::float_t>();
     RCLCPP_DEBUG(this->get_logger(),
-                 "Parameter freq declared, set to default 1.0 hz");
+                 "Parameter freq declared, setting 1.0 Hz as default");
 
     // Creating a subscriber for the parameter
     param_subscriber_ = std::make_shared<rclcpp::ParameterEventHandler>(this);
@@ -65,21 +65,21 @@ class MinimalPublisher : public rclcpp::Node {
         param_subscriber_->add_parameter_callback("freq", parameterCallbackPtr);
 
     publisher_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
-    RCLCPP_DEBUG(this->get_logger(), "Publisher is Created");
+    RCLCPP_DEBUG(this->get_logger(), "Initiated Publisher");
     auto delta = std::chrono::milliseconds(static_cast<int>((1000 / freq)));
     timer_ = this->create_wall_timer(
         delta, std::bind(&MinimalPublisher::timer_cb, this));
 
     client =
         this->create_client<beginner_tutorials::srv::StringMod>("modify_msg");
-    RCLCPP_DEBUG(this->get_logger(), "Client created");
+    RCLCPP_DEBUG(this->get_logger(), "Initiated Client");
     while (!client->wait_for_service(1s)) {
       if (!rclcpp::ok()) {
-        RCLCPP_FATAL(rclcpp::get_logger("rclcpp"), "Interrupted");
+        RCLCPP_FATAL(rclcpp::get_logger("rclcpp"), "Interrupted service");
         exit(EXIT_FAILURE);
       }
       RCLCPP_WARN(rclcpp::get_logger("rclcpp"),
-                  "Service unavailable, waiting for server to start");
+                  "Unavailable service, waiting for start");
     }
   }
 
@@ -90,14 +90,13 @@ class MinimalPublisher : public rclcpp::Node {
   std::shared_ptr<rclcpp::ParameterCallbackHandle> param_handle_;
 
   /**
-   * @brief Timer callback function, sets the message data and publishes the
-   * message and also calls the service at every 10 counts
+   * @brief Timer callback function
    */
   void timer_cb() {
     RCLCPP_INFO_STREAM_ONCE(this->get_logger(), "Node setup");
     auto message = std_msgs::msg::String();
     message.data = "Message published ID " + std::to_string(count_++);
-    RCLCPP_INFO(this->get_logger(), "Outgoing signal : '%s'",
+    RCLCPP_INFO(this->get_logger(), "Publishing message : '%s'",
                 message.data.c_str());
     publisher_->publish(message);
     if (count_ % 10 == 0) {
@@ -105,7 +104,7 @@ class MinimalPublisher : public rclcpp::Node {
     }
     auto steady_clock = rclcpp::Clock();
     RCLCPP_DEBUG_STREAM_THROTTLE(this->get_logger(), steady_clock, 10000,
-                                 "Node running successfully");
+                                 "Successful node execution");
   }
 
   rclcpp::TimerBase::SharedPtr timer_;
@@ -113,8 +112,7 @@ class MinimalPublisher : public rclcpp::Node {
   size_t count_;
 
   /**
-   * @brief Service callback function, defines the service parameters and calls
-   * the response
+   * @brief Service callback function
    * @return int
    */
   int service_cb() {
@@ -129,8 +127,7 @@ class MinimalPublisher : public rclcpp::Node {
   }
 
   /**
-   * @brief Response callback function, calls the response for the service_cb
-   * function
+   * @brief Response callback function
    * @param future
    */
   void response_cb(sharedFuture future) {
@@ -140,8 +137,7 @@ class MinimalPublisher : public rclcpp::Node {
   }
 
   /**
-   * @brief Parameter callback function, assigns the updated value of the
-   * parameter
+   * @brief Parameter callback function
    * @param param
    */
   void param_cb(const rclcpp::Parameter &param) {
