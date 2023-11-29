@@ -91,8 +91,8 @@ class MinimalPublisher : public rclcpp::Node {
     geometry_msgs::msg::TransformStamped t;
 
     t.header.stamp = this->get_clock()->now();
-    t.header.frame_id = "world";  
-    t.child_frame_id = "talk"; 
+    t.header.frame_id = "world";
+    t.child_frame_id = "talk";
 
     // Translation block
     t.transform.translation.x = 10;
