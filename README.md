@@ -48,10 +48,10 @@ Start the `talker` node in the first terminal
 ros2 run beginner_tutorials talker
 ```
 
-Start the `listener` node in the second terminal
+View the `transform` on the new terminal
 
 ```bash
-ros2 run beginner_tutorials listener
+ros2 run tf2_ros tf2_echo world talk
 ```
 
 >**Note:** Source the workspace in the new terminal as well
@@ -64,20 +64,43 @@ ros2 run beginner_tutorials server
 
 >**Note:** Source the workspace in the new terminal as well
 
-Change the `frequency` node in the fourth terminal to `0.0` to see FATAL log info
+Store the `tf` tree 
 
 ```bash
-ros2 param set /minimal_publisher freq 0.0
+cd ~/ros2_ws/src/beginner_tutorials/results
+
+ros2 run tf2_tools view_frames
+```
+
+>**Note:** Source the workspace in the new terminal as well
+
+
+Record the `bag file` by running
+
+```bash
+cd ~/ros2_ws/src/beginner_tutorials/results
+
+ros2 launch beginner_tutorials bag_record.xml bag_record:=1
+```
+
+>**Note:** Source the workspace in the new terminal as well
+
+To view the recorded bag file
+
+```bash
+cd ~/ros2_ws/src/beginner_tutorials/results
+
+ros2 bag info topics
 ```
 
 >**Note:** Source the workspace in the new terminal as well
 
 Hit `Crtl + C` in both the terminals to stop the nodes.
 
-This will look something like this:
+The tf2 data nd tf2 tree will look something like this:
 
-![](results/info_logging_terminal.png)
+![](results/ros2-tf2-bagging.png)
 
-The node graph looks something like this:
+The recorded bag file is read as:
 
-![](results/node_graph.png)
+![](results/ros2-tf2-read-bag-info.png)

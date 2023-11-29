@@ -17,20 +17,23 @@
  * @author Abhimanyu Saxena (asaxena4@umd.edu)
  * @brief Code for getting custom input from user and publishing it
  * @version 0.1
- * @date 2023-11-07
+ * @date 2023-11-27
  * 
  * @copyright Copyright (c) 2023
  * 
  */
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2_ros/static_transform_broadcaster.h>
 
-
-#include <beginner_tutorials/srv/string_mod.hpp>
 #include <chrono>
 #include <functional>
+#include <geometry_msgs/msg/transform_stamped.hpp>
 #include <memory>
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/string.hpp>
 #include <string>
+
+#include <beginner_tutorials/srv/string_mod.hpp>
 
 using std::placeholders::_1;
 using namespace std::chrono_literals;
@@ -81,10 +84,33 @@ class MinimalPublisher : public rclcpp::Node {
       RCLCPP_WARN(rclcpp::get_logger("rclcpp"),
                   "Unavailable service, waiting for start");
     }
+
+    // Broadcast a tf frame info
+    tf_broadcaster_ =
+        std::make_shared<tf2_ros::StaticTransformBroadcaster>(this);
+    geometry_msgs::msg::TransformStamped t;
+
+    t.header.stamp = this->get_clock()->now();
+    t.header.frame_id = "world";
+    t.child_frame_id = "talk";
+
+    // Translation block
+    t.transform.translation.x = 10;
+    t.transform.translation.y = 10;
+    t.transform.translation.z = 10;
+
+    // Rotation block
+    t.transform.rotation.x = 1;
+    t.transform.rotation.y = 1;
+    t.transform.rotation.z = 1;
+    t.transform.rotation.w = 1;
+
+    tf_broadcaster_->sendTransform(t);
   }
 
  private:
   std::string Message;
+  std::shared_ptr<tf2_ros::StaticTransformBroadcaster> tf_broadcaster_;
   rclcpp::Client<beginner_tutorials::srv::StringMod>::SharedPtr client;
   std::shared_ptr<rclcpp::ParameterEventHandler> param_subscriber_;
   std::shared_ptr<rclcpp::ParameterCallbackHandle> param_handle_;
