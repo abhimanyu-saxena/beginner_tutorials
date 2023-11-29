@@ -19,7 +19,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 )
 
 add_executable(talker src/publisher_member_function.cpp)
-ament_target_dependencies(talker rclcpp std_msgs)
+ament_target_dependencies(talker rclcpp std_msgs tf2 tf2_ros geometry_msgs)
 
 add_executable(listener src/subscriber_member_function.cpp)
 ament_target_dependencies(listener rclcpp std_msgs)
